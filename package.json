@@ -1,6 +1,17 @@
 {
+  "name": "proyecto-api-fastify",
+  "version": "1.0.0",
+  "description": "API con Fastify y PostgreSQL",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --env-file=.env server.js",
+    "start": "node --env-file=.env server.js"
+  },
   "dependencies": {
+    "@fastify/env": "^7.0.0",
     "@fastify/postgres": "^6.1.0",
+    "dotenv": "^18.0.3",
     "fastify": "^5.12.5",
     "nodemon": "^3.1.14",
     "pg": "^8.23.0"
