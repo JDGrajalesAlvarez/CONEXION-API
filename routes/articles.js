@@ -1,6 +1,9 @@
 export async function articles(fastify) {
   fastify.get("/", async (request, reply) => {
-    reply.send({ message: "Bienvenido a la API de artículos, dirijete a http://localhost:3000/articles para ver los artículos" });
+    reply.send({
+      message:
+        "Bienvenido a la API de artículos, dirijete a http://localhost:3000/articles para ver los artículos",
+    });
   });
 
   fastify.get("/articles", async (request, reply) => {
@@ -45,17 +48,16 @@ export async function articles(fastify) {
       RETURNING *
     `;
 
-      reply.code(201);
-      console.log("Creacion de artículo exitosa");
       const result = await fastify.pg.query(query, [title, content, author]);
       reply.send(result.rows[0]);
-      reply.send("creado correctamente");
+      reply.code(201);
+      console.log("Creacion de artículo exitosa");
     } catch (error) {
       reply.status(500).send({ error: "No se pudo crear el artículo" });
     }
   });
 
-  fastify.patch("/articles/:id", async (request, reply) => {
+  fastify.put("/articles/:id", async (request, reply) => {
     const { id } = request.params;
     const { title, content, author } = request.body;
 
@@ -66,9 +68,15 @@ export async function articles(fastify) {
       WHERE id = $4 
       RETURNING *
     `;
+
       const values = [title, content, author, id];
       const result = await fastify.pg.query(query, values);
+      if (result === undefined || result.rows.length === 0) {
+        return reply.status(404).send({ error: "Artículo no encontrado" });
+      }
+      reply.code(201);
       reply.send(result.rows[0]);
+      console.log("Actualización de artículo exitosa");
     } catch (error) {
       reply.status(500).send({ error: "No se pudo actualizar el artículo" });
     }
@@ -89,4 +97,4 @@ export async function articles(fastify) {
       reply.status(500).send({ error: "No se pudo eliminar el artículo" });
     }
   });
-}
+};
