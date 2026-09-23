@@ -49,9 +49,8 @@ export async function articles(fastify) {
     `;
 
       const result = await fastify.pg.query(query, [title, content, author]);
-      reply.send(result.rows[0]);
-      reply.code(201);
       console.log("Creacion de artículo exitosa");
+      return reply.code(201).send(result.rows[0]);
     } catch (error) {
       reply.status(500).send({ error: "No se pudo crear el artículo" });
     }
@@ -74,9 +73,8 @@ export async function articles(fastify) {
       if (result === undefined || result.rows.length === 0) {
         return reply.status(404).send({ error: "Artículo no encontrado" });
       }
-      reply.code(201);
-      reply.send(result.rows[0]);
       console.log("Actualización de artículo exitosa");
+      return reply.code(200).send(result.rows[0]);
     } catch (error) {
       reply.status(500).send({ error: "No se pudo actualizar el artículo" });
     }
@@ -97,4 +95,4 @@ export async function articles(fastify) {
       reply.status(500).send({ error: "No se pudo eliminar el artículo" });
     }
   });
-};
+}
