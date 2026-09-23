@@ -1,4 +1,8 @@
 export async function articles(fastify) {
+  fastify.get("/", async (request, reply) => {
+    reply.send({ message: "Bienvenido a la API de artículos, dirijete a http://localhost:3000/articles para ver los artículos" });
+  });
+
   fastify.get("/articles", async (request, reply) => {
     try {
       const datos = await fastify.pg.query("SELECT * FROM articles");
